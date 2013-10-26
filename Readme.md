@@ -1,18 +1,8 @@
 ## Installation
 
-    $ npm install -g sleek.js
-
-## Quick Start
-
- The quickest way to get started with is to generate an application as shown below:
-
- Create the app:
-
-    $ npm install -g sleek.js
-
- Start the server:
-
-    $ node app
+    Just download and run `node app.js` in terminal from your directory
+    
+    See in action @ port 3000
 
 ## Features
 

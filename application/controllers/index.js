@@ -20,11 +20,6 @@ exports.index = function(req, res){
 //    user.list(req, res);
 //    return;
 //    
-    var events = require('events');
-    var socket = new events.EventEmitter();
-    socket.on('newListGroup', function (data) {
-        console.log(11);
-    });
     var data = {
 //        layout: 'main',
         title: "Sleek.js",
