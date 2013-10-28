@@ -107,6 +107,16 @@ global.system = {
         
     },
     
+    /**
+     * Load view
+     * 
+     * @param object response res object
+     * @param char view name file path from view folder
+     * @param object data Set data to load in view
+     * 
+     * @author Robin <robin@cubettech.com>
+     * @Date 23-10-2013
+     */
     loadView: function(res, view, passedData){
         try {
             var getpath  = path.join(sleekConfig.theme,view+'.html');
@@ -161,7 +171,15 @@ global.system = {
             this.log(err);
         }
     },
-    
+    /**
+     * Write log
+     * 
+     * @param char path file path from view folder
+     * @param char name Set a name for partial to load in view
+     * 
+     * @author Robin <robin@cubettech.com>
+     * @Date 23-10-2013
+     */
     log: function(str, status){
         if(!status) {
             status = 'Error';

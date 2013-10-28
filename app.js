@@ -2,6 +2,7 @@
  * Sleek app init
  * Here we iniialize :: Please dont edit :)
  *  
+ * @package Sleek.js
  * @version 1.0
  * @author Robin <robin@cubettech.com>
  * @Date 23-10-2013
@@ -13,6 +14,7 @@ var path = require('path');
 var hbs = require('handlebars');
 var engines = require('consolidate');
 var exphbs  = require('express3-handlebars');
+var io = require('socket.io');
 global.app = express();
 
 //get configs
@@ -43,6 +45,14 @@ if ('development' == app.get('env')) {
 //get controllers
 require('./application/config/routes.js')(app)
 
-http.createServer(app).listen(app.get('port'), function(){
+
+var server = http.createServer(app);
+global.sio = io.listen(server);
+
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
+});
+
+sio.sockets.on('connection', function (socket) {
+    global.sock = socket;
 });

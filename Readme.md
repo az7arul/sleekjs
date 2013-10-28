@@ -1,6 +1,12 @@
 ## Installation
 
-    Just download and run `node app.js` in terminal from your directory
+Download the package:
+
+    $ npm install -g sleek.js
+
+Locakte the package & enter the package root, start the server:
+
+    $ node app.js
     
     See in action @ port 3000
 

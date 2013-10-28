@@ -1,3 +1,12 @@
+/**
+ * Sample Model
+ * 
+ * @package Sleek.js
+ * @version 1.0
+ * @author Robin <robin@cubettech.com>
+ * @Date 23-10-2013
+ */
+
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
@@ -7,11 +16,6 @@ var userSchema = new Schema({
 
 var PostModel = mongoose.model('User', userSchema, 'usercollections');
 
-function test() {
-    console.log('hii');
-    return 'hiii';
-}
-
 //write function here
 exports.list = function(callback){
     PostModel.find(function (err, person) {
@@ -19,9 +23,3 @@ exports.list = function(callback){
         callback(person);
     });
 }
-//
-////set routes
-//module.exports ={
-//    test: test,
-//    list:list
-//}
