@@ -6,7 +6,7 @@ Using Sleek.Js we can make powerful websites in Nodejs platform. Sleek.Js gives 
 
 For documentation and other details. GOTO [Sleek.js](http://www.sleekjs.com)
 
-Cubet Techno Labs. Pvt. Ltd. owns and maintains Sleek.Js code and posts frequent updates. If you have any queries please feel free to contact us at <info@cubettech.com>
+[Cubet Techno Labs. Pvt. Ltd.](http://www.cubettech.com) owns and maintains Sleek.Js code and posts frequent updates. If you have any queries please feel free to contact us at <info@cubettech.com>
 
 ## Installation
 
