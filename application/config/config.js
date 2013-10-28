@@ -31,7 +31,7 @@
  */
 
 //port number
-global.sleekConfig.appPort = 3000;
+global.sleekConfig.appPort = 3001;
 
 global.sleekConfig.siteUrl = 'http://localhost:3000/'
 

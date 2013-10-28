@@ -37,6 +37,7 @@ global.appPath = path.dirname(require.main.filename);
 
 global.sleekConfig = {};
 require(path.join(appPath,'application/config/config.js'));
+require(path.join(appPath,'application/config/defines.js'));
 require('./db.js');
     
 
@@ -164,18 +165,18 @@ global.system = {
 
                         for(var count in data.css) {
                             if (fs.existsSync(path.join(appPath,'public', sleekConfig.theme, 'css', data.css[count]+'.css'))) {
-                                scripts += '<link rel="stylesheet" href="'+path.join(sleekConfig.theme, 'css', data.css[count]+'.css')+'"/>\n';
+                                scripts += '<link rel="stylesheet" href="'+path.join('/',sleekConfig.theme, 'css', data.css[count]+'.css')+'"/>\n';
                             } else {
-                                scripts += '<link rel="stylesheet" href="'+path.join('default', 'css', data.css[count]+'.css')+'"/>\n';
+                                scripts += '<link rel="stylesheet" href="'+path.join('/default', 'css', data.css[count]+'.css')+'"/>\n';
                             }
                             
                         }
 
                         for(var count in data.js) {
                             if (fs.existsSync(path.join(appPath,'public', sleekConfig.theme, 'js', data.js[count]+'.js'))) {
-                                scripts += '<script type="text/javascript" src="'+path.join(sleekConfig.theme, 'js', data.js[count]+'.js')+'" ></script>\n';
+                                scripts += '<script type="text/javascript" src="'+path.join('/',sleekConfig.theme, 'js', data.js[count]+'.js')+'" ></script>\n';
                             } else {
-                                scripts += '<script type="text/javascript" src="'+path.join('default', 'js', data.js[count]+'.js')+'" ></script>\n';
+                                scripts += '<script type="text/javascript" src="'+path.join('/default', 'js', data.js[count]+'.js')+'" ></script>\n';
                             }
                             
                         }
@@ -218,3 +219,24 @@ global.system = {
         }
     }
 };
+
+module.exports = function(app){
+    
+    var R = require(path.join(appPath, 'application/config/routes.js'));
+    
+    for(var c in R.routes) {
+        var rt = R.routes[c];
+        var rts = system.getController(rt.controller);
+        var act = rt.action;
+        var rout = rt.route;
+        for(var r in rt.params) {
+            rout += '/' + rt.params[r] + '([A-Za-z0-9_]+)?'
+        }
+        console.log(rout);
+        app.get(rout, rts[act]);
+        
+    }
+    app.get('*/([A-Za-z0-9_]+)', function(req, res){
+        system.loadView(res,'error');
+    });
+}

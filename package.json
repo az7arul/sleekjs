@@ -7,14 +7,14 @@
     "Node MVC"
   ],
   "author": "Cubet Techno Labs, Cochin <info@cubettech.com>",
-  "description": "A simple MVC framwork for node js, developed by Cubet techno labs",
+  "description": "Sleek.Js is an MVC Framework implemented from Node.JS, built-in with base dependency on handlebars.js, express.js, mongoose. Sleek.Js architecture follows common format of MVC which makes it easy to handle and build better sites",
   "contributors": [ 
     {
       "name": "Robin C Samuel",
       "email": "robin@cubettech.com"
     } 
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "scripts": {
     "start": "node app.js"

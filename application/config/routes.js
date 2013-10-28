@@ -33,12 +33,10 @@
  */
 
 //define controllers
-var routes = system.getController('index');
 
-//Add routes
-module.exports = function (app) {
-    // use :param to get param, :param? for optional params
-    app.get('/', routes.index);
-}
+exports.routes = [
+    {route: '', controller: 'index', action:'index', params:[':param1', ':param2', ':param3']},
+
+];
 
 

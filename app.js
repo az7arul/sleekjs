@@ -41,7 +41,7 @@ var exphbs  = require('express3-handlebars');
 global.app = express();
 
 //get configs
-require('./system/core/sleek.js');
+require('./system/core/sleek.js')(app);
 app.set('env', sleekConfig.env);
 
 // all environments
@@ -58,16 +58,19 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('CubEtNoDeSlEek'));
 app.use(express.session());
+app.use(express.static(path.join(__dirname, 'public', sleekConfig.theme)));
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 } 
 //get controller routes
-require('./application/config/routes.js')(app)
 var server = http.createServer(app);
+try {
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+} catch (e) {
+    system.log(e);
+}

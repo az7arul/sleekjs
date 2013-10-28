@@ -10,7 +10,7 @@ For documentation and other details. GOTO [Sleek.js](http://www.sleekjs.com)
 
 ## Installation
 
-Run `$ npm install -g sleek.js` from terminal
+Run `$ npm install sleek.js` from terminal
 
 Locate the package and run `$ node app.js` from root 
 
