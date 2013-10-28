@@ -1,12 +1,16 @@
+##Sleek.js
+
+    Sleek.Js is an MVC Framework implemented from Node.JS, built-in with base dependency on handlebars.js, express.js, mongoose. Sleek.Js architecture follows common format of MVC which makes it easy to handle and build better sites.
+
+    Using Sleek.Js we can make powerful websites in Nodejs platform. Sleek.Js gives better performance, flexibility and easy maintenance.
+
+    For documentation and other details. GOTO <Sleek.JS>
+
+    Cubet Techno Labs. Pvt. Ltd. owns and maintains Sleek.Js code and posts frequent updates. If you have any queries please feel free to contact us at <info@cubettech.com>
+
 ## Installation
 
-Download the package:
-
-    $ npm install -g sleek.js
-
-Locakte the package & enter the package root, start the server:
-
-    $ node app.js
+    Just download and run `node app.js` in terminal from your directory
     
     See in action @ port 3000
 
@@ -15,14 +19,14 @@ Locakte the package & enter the package root, start the server:
   * MVC Architecture
   * Simple folder structures
   * Easy to use 
-  * Change the configurations easily
+  * Change the configurations easily from config file
 
 
 ## License
 
 (The MIT License)
 
-Copyright (c) 2007-2013 Cubet Techno Labs, <info@cubettech.com>;
+Copyright Cubet Techno Labs (c) 2013  <info@cubettech.com>;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

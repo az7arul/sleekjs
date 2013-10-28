@@ -8,13 +8,11 @@
  * @Date 23-10-2013
  */
 
-   
+//index function
 exports.index = function(req, res){
     var data = {
-//        layout: 'main',
-        title: "Sleek.js",
-        home: "An MVC for Node js.. combining handlebars, express & mongodb together"
+        title: "Sleek.js"
     }
-    
+    //load index.html from home directory
     system.loadView(res,'home/index', data);
 };
