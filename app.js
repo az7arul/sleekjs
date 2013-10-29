@@ -38,28 +38,38 @@ var path = require('path');
 var hbs = require('handlebars');
 var engines = require('consolidate');
 var exphbs  = require('express3-handlebars');
+var helmet  = require('helmet');
 global.app = express();
 
+global.sleekConfig = {};
+require(path.join(__dirname,'application/config/config.js'));
+app.configure(function(){
+    app.set('env', sleekConfig.env);
+    // all environments
+    app.set('port', process.env.PORT || sleekConfig.appPort);
+    app.set('views', path.join(__dirname, 'application/views'));
+    app.set('view engine', 'handlebars');
+    //app.set("view options", {layout: path.join(__dirname, 'application/views/mylayout.html')});
+    app.engine('html',  exphbs({defaultLayout: path.join(__dirname, 'application/layouts/default'),
+                                layoutsDir: path.join(__dirname, 'application/layouts/'), extname:".html"})
+                ); 
+    app.use(express.favicon(path.join(__dirname, 'public/favicon.ico'))); 
+    app.use(express.logger('dev'));
+    app.use(express.json());
+    app.use(express.urlencoded());
+    app.use(helmet.xframe());
+    app.use(helmet.iexss());
+    app.use(helmet.contentTypeOptions());
+    app.use(helmet.cacheControl());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser('CubEtNoDeSlEek'));
+    app.use(express.session());
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.set('strict routing');
+    app.use(app.router);
+});
 //get configs
 require('./system/core/sleek.js')(app);
-app.set('env', sleekConfig.env);
-
-// all environments
-app.set('port', process.env.PORT || sleekConfig.appPort);
-app.set('views', path.join(__dirname, 'application/views'));
-app.set('view engine', 'handlebars');
-//app.set("view options", {layout: path.join(__dirname, 'application/views/mylayout.html')});
-app.engine('html',  exphbs({defaultLayout: path.join(__dirname, 'application/layouts/default'),
-                            layoutsDir: path.join(__dirname, 'application/layouts/'), extname:".html"})
-            ); 
-app.use(express.favicon(path.join(__dirname, 'public/favicon.ico'))); 
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.cookieParser('CubEtNoDeSlEek'));
-app.use(express.session());
-app.use(express.static(path.join(__dirname, 'public', sleekConfig.theme)));
-app.use(app.router);
 
 // development only
 if ('development' == app.get('env')) {
@@ -68,9 +78,9 @@ if ('development' == app.get('env')) {
 //get controller routes
 var server = http.createServer(app);
 try {
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+    server.listen(app.get('port'), function(){
+      console.log('Express server listening on port ' + app.get('port'));
+    });
 } catch (e) {
     system.log(e);
 }

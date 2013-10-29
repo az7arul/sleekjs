@@ -1,6 +1,6 @@
 /* 
- * Routes.
- * Add your routes here
+ * Routing functions
+ * Add your routes functions here 
  * 
  * @package Sleek.js
  * @version 1.0
@@ -32,9 +32,7 @@
  * @Date 23-10-2013
  */
 
-//define routes
-exports.routes = [
-    {route: '/', controller: 'index', action:'index'},
-];
-
-
+//define route functions here
+module.exports = {
+    
+}

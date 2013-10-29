@@ -9,7 +9,7 @@
 
 
 module.exports = function (app) {
-    UPLOAD_PATH = 'hey';
+    UPLOAD_PATH = '/uploads/';
 }
 
 

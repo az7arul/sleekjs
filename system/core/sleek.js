@@ -35,8 +35,6 @@ var hbs = require('handlebars');
 var fs = require('fs');
 global.appPath = path.dirname(require.main.filename);
 
-global.sleekConfig = {};
-require(path.join(appPath,'application/config/config.js'));
 require(path.join(appPath,'application/config/defines.js'));
 require('./db.js');
     
@@ -44,18 +42,22 @@ require('./db.js');
 //set loggings as in config
 if(sleekConfig.logToFile == true) {
     var fs = require('fs');
-    var access = fs.createWriteStream(path.join(appPath, sleekConfig.accesslog), {flags:'a'});
+    var access = fs.createWriteStream(path.join(appPath, sleekConfig.accesslog), {
+        flags:'a'
+    });
     process.stdout.write = (function(write) {
-            return function(string, encoding, fd) {
-                    access.write(string);
-            }
+        return function(string, encoding, fd) {
+            access.write(string);
+        }
     })(process.stdout.write)
 
-    var errorLog = fs.createWriteStream(path.join(appPath, sleekConfig.errorlog), {flags:'a'});
+    var errorLog = fs.createWriteStream(path.join(appPath, sleekConfig.errorlog), {
+        flags:'a'
+    });
     process.stderr.write = (function(write) {
-            return function(string, encoding, fd) {
-                    errorLog.write(string);
-            }
+        return function(string, encoding, fd) {
+            errorLog.write(string);
+        }
     })(process.stdout.write)
 }
     
@@ -87,6 +89,21 @@ global.system = {
     getLibrary: function(l){
         try {
             return require(path.join(appPath ,'lib',l+'.js'));
+        } catch (err) {
+            this.log(err);
+        }
+    },
+    /**
+     * get a helpers object
+     * 
+     * @param char name helper name
+     * @returns helper object
+     * @author Robin <robin@cubettech.com>
+     * @Date 23-10-2013
+     */
+    getHelper: function(h){
+        try {
+            return require(path.join(appPath ,'application/helpers',h+'.js'));
         } catch (err) {
             this.log(err);
         }
@@ -158,8 +175,8 @@ global.system = {
                 if(exists) {
                     fs.readFile(assetFile, 'utf8', function (err, data) {
                         if (err) {
-                          this.log(err);
-                          return;
+                            this.log(err);
+                            return;
                         }
                         data = JSON.parse(data);
 
@@ -221,22 +238,34 @@ global.system = {
 };
 
 module.exports = function(app){
-    
-    var R = require(path.join(appPath, 'application/config/routes.js'));
-    
-    for(var c in R.routes) {
-        var rt = R.routes[c];
-        var rts = system.getController(rt.controller);
-        var act = rt.action;
-        var rout = rt.route;
-        for(var r in rt.params) {
-            rout += '/' + rt.params[r] + '([A-Za-z0-9_]+)?'
+    try {
+        var R = require(path.join(appPath, 'application/config/routes.js'));
+        var Helper = require(path.join(appPath, 'application/helpers/routes.js'));
+
+        var rts = [];
+        for(var c in R.routes) {
+            var rt = R.routes[c];
+            rts[c] = system.getController(rt.controller);
+            var act = rt.action;
+            var rout = rt.route;
+            for(var r in rt.params) {
+                rout += '/' + rt.params[r] + '([A-Za-z0-9_]+)?'
+            }
+            var fn = Helper[rt.fn] ? Helper[rt.fn] : function(req,res,next){
+                next();
+            };
+            
+            if(rt.type && rt.type == "POST") {
+                app.post(rout, fn, rts[c][act]);
+            } else {
+                app.get(rout, fn, rts[c][act]);
+            }
+
         }
-        console.log(rout);
-        app.get(rout, rts[act]);
-        
+    } catch (e){
+        system.log(e);
     }
     app.get('*/([A-Za-z0-9_]+)', function(req, res){
         system.loadView(res,'error');
-    });
+    });                                                                                                                                                                                                               
 }

@@ -10,7 +10,6 @@
 
 //index function
 exports.index = function(req, res){
-    console.log(req.params);
     var data = {
         title: "Sleek.js"
     }
