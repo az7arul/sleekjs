@@ -39,6 +39,7 @@ var hbs = require('handlebars');
 var engines = require('consolidate');
 var exphbs  = require('express3-handlebars');
 var helmet  = require('helmet');
+var io = require('socket.io');
 global.app = express();
 
 global.sleekConfig = {};
@@ -78,8 +79,11 @@ if ('development' == app.get('env')) {
 //get controller routes
 var server = http.createServer(app);
 try {
+    if(sleekConfig.enableSocketio == true) {
+        global.sleekio = io.listen(server, { log: sleekConfig.enableSocketLogs });
+    }
     server.listen(app.get('port'), function(){
-      console.log('Express server listening on port ' + app.get('port'));
+      console.log('server listening on port ' + app.get('port'));
     });
 } catch (e) {
     system.log(e);

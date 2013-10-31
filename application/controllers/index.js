@@ -16,3 +16,4 @@ exports.index = function(req, res){
     //load index.html from home directory
     system.loadView(res,'home/index', data);
 };
+

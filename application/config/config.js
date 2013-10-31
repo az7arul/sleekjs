@@ -36,6 +36,8 @@ global.sleekConfig.appPort = 3001;
 global.sleekConfig.siteUrl = 'http://localhost:3000/'
 
 global.sleekConfig.env = 'development';
+global.sleekConfig.enableSocketio = false;
+global.sleekConfig.enableSocketLogs = true;
 
 // mongodb database settings
 global.sleekConfig.dbHost = 'localhost';
