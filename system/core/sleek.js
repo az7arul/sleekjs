@@ -34,7 +34,7 @@ var path = require('path');
 var hbs = require('handlebars');
 var fs = require('fs');
 global.appPath = path.dirname(require.main.filename);
-
+global.HELPER ={};
 require(path.join(appPath,'application/config/defines.js'));
 require('./db.js');
     
@@ -103,7 +103,7 @@ global.system = {
      */
     getHelper: function(h){
         try {
-            return require(path.join(appPath ,'application/helpers',h+'.js'));
+            global.HELPER[h]= require(path.join(appPath ,'application/helpers',h+'.js'));
         } catch (err) {
             this.log(err);
         }

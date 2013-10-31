@@ -9,10 +9,10 @@
  */
 
 //index function
-module.exports = {
+var indexController = {
     index:function(req, res){
-        H = system.getHelper('routes');
-        H.helper();
+        system.getHelper('routes');
+        HELPER.routes.helper();
         var data = {
             title: "Sleek.js"
         }
@@ -20,3 +20,5 @@ module.exports = {
         system.loadView(res,'home/index', data);
     }
 }
+
+module.exports = indexController;
