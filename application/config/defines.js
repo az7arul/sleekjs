@@ -7,9 +7,8 @@
  * @Date 23-10-2013
  */
 
-
-module.exports = function (app) {
-    UPLOAD_PATH = '/uploads/';
+global.DEFINES = {
+    HELLO: 'Hello'
 }
 
 

@@ -9,11 +9,14 @@
  */
 
 //index function
-exports.index = function(req, res){
-    var data = {
-        title: "Sleek.js"
+module.exports = {
+    index:function(req, res){
+        H = system.getHelper('routes');
+        H.helper();
+        var data = {
+            title: "Sleek.js"
+        }
+        //load index.html from home directory
+        system.loadView(res,'home/index', data);
     }
-    //load index.html from home directory
-    system.loadView(res,'home/index', data);
-};
-
+}

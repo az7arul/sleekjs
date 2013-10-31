@@ -19,9 +19,11 @@ var userSchema = new Schema({
 var PostModel = mongoose.model('User', userSchema, 'usercollections');
 
 //write function here
-exports.list = function(callback){
-    PostModel.find(function (err, person) {
-        if (err) return handleError(err);
-        callback(person);
-    });
+module.exports = {
+    list: function(callback){
+        PostModel.find(function (err, person) {
+            if (err) return handleError(err);
+            callback(person);
+        });
+    }
 }

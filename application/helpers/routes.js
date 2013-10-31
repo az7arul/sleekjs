@@ -34,5 +34,7 @@
 
 //define route functions here
 module.exports = {
-    
+    helper: function(){
+        console.log ('helper is working fine');
+    }
 }
