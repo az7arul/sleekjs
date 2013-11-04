@@ -58,6 +58,9 @@ app.configure(function(){
     app.use(express.logger('dev'));
     app.use(express.json());
     app.use(express.urlencoded());
+    if(sleekConfig.useExpressMultipart == true) {
+       app.use(express.multipart()); 
+    }    
     app.use(helmet.xframe());
     app.use(helmet.iexss());
     app.use(helmet.contentTypeOptions());

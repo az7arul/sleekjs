@@ -39,6 +39,8 @@ global.sleekConfig.env = 'development';
 global.sleekConfig.enableSocketio = false;
 global.sleekConfig.enableSocketLogs = true;
 
+global.useExpressMultipart = false; //use express multipart for form handling.
+
 // mongodb database settings
 global.sleekConfig.dbHost = 'localhost';
 global.sleekConfig.dbPort = '';
