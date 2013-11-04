@@ -1,11 +1,14 @@
+![sleekjs, nodejs mvc framework](http://www.sleekjs.com/wp-content/themes/easy-docs/img/logo.png)
+
 ##Sleek.js
 
-Sleek.Js is an MVC Framework implemented from Node.JS, built-in with base dependency on handlebars.js, express.js, mongoose. Sleek.Js architecture follows common format of MVC which makes it easy to handle and build better sites.
+Sleek.js is an MVC Framework implemented from Node.jS, built-in with base dependency on handlebars.js, express.js, mongoose. Sleek.js architecture follows common format of MVC which makes it easy to handle and build better sites.
 
-Using Sleek.Js we can make powerful websites in Nodejs platform. Sleek.Js gives better performance, flexibility and easy maintenance.
+Using Sleek.js we can make powerful websites in Nodejs platform. Sleek.js gives better performance, flexibility and easy maintenance.
 
-For documentation and other details. GOTO [Sleek.js](http://www.sleekjs.com)
+For documentation and other details. navigate to [Sleek.js](http://www.sleekjs.com)
 
+See realtime demo at [Sleek.js Demo](http://demo.sleekjs.com)
 [Cubet Techno Labs. Pvt. Ltd.](http://www.cubettech.com) owns and maintains Sleek.Js code and posts frequent updates. If you have any queries please feel free to contact us at <info@cubettech.com>
 
 ## Installation
@@ -24,9 +27,10 @@ See in action @ port `3001`
 
   * MVC Architecture
   * Simple folder structures
-  * Easy to use 
+  * Easy to get started
   * Change the configurations easily from config file
-
+  * Socket.io support for realtime webapps
+  * Flexible as node.js
 
 ## License
 
