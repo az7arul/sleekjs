@@ -30,17 +30,20 @@
  * @Date 23-10-2013
  */
 
-global.mongoose = require('mongoose');
-var options = {
-  user: sleekConfig.dbUser,
-  pass: sleekConfig.dbPass
-}
-
 try {
-    mongoose.connect('mongodb://'+sleekConfig.dbHost+':'+sleekConfig.dbPort+'/' + sleekConfig.dbName, options);
+    var mongo = require('mongodb').MongoClient;
+    
+    mongo.connect('mongodb://'+ (sleekConfig.dbHost ? sleekConfig.dbHost : 'localhost') + ':'+(sleekConfig.dbPort ? sleekConfig.dbPort : '27017') +'/' + sleekConfig.dbName, function(err, db) {
+        if(err) throw err;
+        global.mongodb = db;
+        if(sleekConfig.dbUser && sleekConfig.dbPass) {
+            mongodb.authenticate(sleekConfig.dbUser, sleekConfig.dbPass, function(err, res) {
+              // callback
+            });
+        }
+    });
 }
 catch (err) {
     console.log(err);
 }
-
 

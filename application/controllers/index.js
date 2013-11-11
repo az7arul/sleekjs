@@ -11,8 +11,6 @@
 //index function
 var indexController = {
     index:function(req, res){
-        system.getHelper('routes');
-        HELPER.routes.helper();
         var data = {
             title: "Sleek.js"
         }

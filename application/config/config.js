@@ -33,18 +33,14 @@
 //port number
 global.sleekConfig.appPort = 3001;
 
-global.sleekConfig.siteUrl = 'http://localhost:3000/'
+global.sleekConfig.siteUrl = 'http://localhost:3001'
 
 global.sleekConfig.env = 'development';
-global.sleekConfig.enableSocketio = false;
-global.sleekConfig.enableSocketLogs = true;
-
-global.useExpressMultipart = false; //use express multipart for form handling.
 
 // mongodb database settings
 global.sleekConfig.dbHost = 'localhost';
 global.sleekConfig.dbPort = '';
-global.sleekConfig.dbName = 'nodetest';
+global.sleekConfig.dbName = 'sleek';
 global.sleekConfig.dbUser = '';
 global.sleekConfig.dbPass = '';
 

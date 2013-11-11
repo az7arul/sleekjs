@@ -7,23 +7,13 @@
  * @Date 23-10-2013
  */
 
-var Schema = mongoose.Schema;
-
-//declare your schema
-var userSchema = new Schema({
-    author    : String
-  , title     : String
-});
-
-//Register model
-var PostModel = mongoose.model('User', userSchema, 'usercollections');
-
 //write function here
 var userModel = {
     list: function(callback){
-        PostModel.find(function (err, person) {
-            if (err) return handleError(err);
-            callback(person);
+        var collection =mongodb.collection('usercollections');
+            // Locate all the entries using find
+        collection.find().toArray(function(err, results) {
+            callback(results);
         });
     }
 }

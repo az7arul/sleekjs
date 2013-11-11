@@ -39,7 +39,6 @@ var hbs = require('handlebars');
 var engines = require('consolidate');
 var exphbs  = require('express3-handlebars');
 var helmet  = require('helmet');
-var io = require('socket.io');
 global.app = express();
 
 global.sleekConfig = {};
@@ -50,17 +49,13 @@ app.configure(function(){
     app.set('port', process.env.PORT || sleekConfig.appPort);
     app.set('views', path.join(__dirname, 'application/views'));
     app.set('view engine', 'handlebars');
-    //app.set("view options", {layout: path.join(__dirname, 'application/views/mylayout.html')});
     app.engine('html',  exphbs({defaultLayout: path.join(__dirname, 'application/layouts/default'),
                                 layoutsDir: path.join(__dirname, 'application/layouts/'), extname:".html"})
                 ); 
     app.use(express.favicon(path.join(__dirname, 'public/favicon.ico'))); 
     app.use(express.logger('dev'));
     app.use(express.json());
-    app.use(express.urlencoded());
-    if(sleekConfig.useExpressMultipart == true) {
-       app.use(express.multipart()); 
-    }    
+    app.use(express.urlencoded());  
     app.use(helmet.xframe());
     app.use(helmet.iexss());
     app.use(helmet.contentTypeOptions());
@@ -79,12 +74,9 @@ require('./system/core/sleek.js')(app);
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 } 
-//get controller routes
+
 var server = http.createServer(app);
 try {
-    if(sleekConfig.enableSocketio == true) {
-        global.sleekio = io.listen(server, { log: sleekConfig.enableSocketLogs });
-    }
     server.listen(app.get('port'), function(){
       console.log('server listening on port ' + app.get('port'));
     });
