@@ -34,7 +34,9 @@ Handlebars = require('handlebars');
 
 //helper function
 Handlebars.registerHelper('$', function(name, args) {
-   var args = args.split(" ");
+   if(args) {
+        var args = args.split(" ");
+   }
    return HELPER[name]();
 });
 

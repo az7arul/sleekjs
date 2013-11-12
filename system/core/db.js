@@ -34,6 +34,19 @@ var path = require('path');
 var fs = require('fs');
 
 try {
+    //depricated function call
+    if(sleekConfig.dbHost && sleekConfig.dbName){
+        console.log('This method has been deprecated! sleek.js doesn\'t use mongoose. ! please update your code. ');
+        console.log('Docs at http://sleekjs.com/docs ');
+        console.log('changelog at http://sleekjs.com/change-log ');
+        global.mongoose = require('mongoose');
+        var options = {
+          user: sleekConfig.dbUser,
+          pass: sleekConfig.dbPass
+        }
+        mongoose.connect('mongodb://'+sleekConfig.dbHost+':'+sleekConfig.dbPort+'/' + sleekConfig.dbName, options);
+    }
+    
     fs.exists(path.join(appPath,'application/config', 'mongodb.js'), function(exists){
         if(exists) {
             var config = require(path.join(appPath, 'application/config','mongodb.js'));
