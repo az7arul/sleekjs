@@ -37,16 +37,8 @@ global.sleekConfig.siteUrl = 'http://localhost:3001'
 
 global.sleekConfig.env = 'development';
 
-// mongodb database settings
-global.sleekConfig.dbHost = 'localhost';
-global.sleekConfig.dbPort = '';
-global.sleekConfig.dbName = 'sleek';
-global.sleekConfig.dbUser = '';
-global.sleekConfig.dbPass = '';
-
-
 //themeing
-global.sleekConfig.theme = 'default'
+global.sleekConfig.theme = 'default';
 
 //logging
 global.sleekConfig.logToFile = false; // if true, logs will write to file instead of console.

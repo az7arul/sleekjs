@@ -1,0 +1,56 @@
+/*
+* Stylesheet
+*/
+
+.sub_container {
+    border: 1px solid #E3E3E3;
+    margin: 3% auto 0;
+    padding-bottom: 20px;
+    padding-top: 50px;
+    text-align: center;
+    width: 800px;
+    font-family: arial;
+}
+.logo-col{ width:180px; height:51px; margin:0 auto;}
+.sub_container h2{ font-size:40px; font-weight:normal; color:#9e9e9e; font-family:Arial, Helvetica, sans-serif;}
+.sub_cnt_col{ background:#f4f4f4; padding:30px 20px}
+.sub_cnt_col p{ color:#2c3e50; font-family:Arial, Helvetica, sans-serif; font-size:12px; text-align:left;}
+.sub_container .footer{ margin-top:60px;}
+.sub_container .footer p{color:#2c3e50; font-family:Arial, Helvetica, sans-serif; font-size:11px;}
+.sub_container  a {
+   color: #EE747D;
+   font-family: Arial,Helvetica,sans-serif;
+   font-size: 11px;
+   text-decoration: none;
+}
+.sub_container .footer a:hover{
+   color: #f15b66;
+}
+
+.sub_container {
+    border: 1px solid #E3E3E3;
+    margin: 3% auto 0;
+    padding-bottom: 20px;
+    padding-top: 25px;
+    text-align: center;
+    width: 800px;
+}
+.userlist{ -moz-box-sizing: border-box;
+    padding: 12px 0;
+    width: 100%; }
+.userlist p {text-align: center;}
+.sub_cnt_col input[type='text'] {border: 1px solid #E6E6E6; font-size:13px; padding: 5px; text-align: center;width: 178px;}
+.sub_cnt_col .addUser {border: 1px solid #E6E6E6; font-size:13px; padding: 5px; text-align: center; background:#f05a67; color:#FFF;}
+.sub_container table {
+    font-size: 13px;
+    margin-left: 69px;
+    text-align: center;
+    width: 605px;
+}
+
+.removeUser {
+    background: url('/default/images/remove-bttn.png') no-repeat !important;
+    height: 14px;
+    width: 14px;
+    display: block;
+}

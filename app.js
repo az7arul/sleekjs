@@ -35,8 +35,6 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var hbs = require('handlebars');
-var engines = require('consolidate');
 var exphbs  = require('express3-handlebars');
 var helmet  = require('helmet');
 global.app = express();

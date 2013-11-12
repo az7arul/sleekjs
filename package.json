@@ -1,6 +1,6 @@
 {
   "name": "sleek.js",
-  "version": "0.1.62",
+  "version": "0.1.63",
   "homepage": "http://www.sleekjs.com",
   "title": "Fully flexible mvc framework for node.js, developed using express, handlebars, mongodb as base dependecies",
   "keywords": [
@@ -51,7 +51,6 @@
     "express": "3.4.2",
     "handlebars": "latest",
     "mongodb": "1.3.19",
-    "consolidate": "latest",
     "express3-handlebars": "0.5.0",
     "helmet": "0.1.2"
   },
