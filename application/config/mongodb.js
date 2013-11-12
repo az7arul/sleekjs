@@ -1,5 +1,5 @@
 /** 
- * Configuration
+ * Mongodb Configuration
  * 
  * @package Sleek.js
  * @version 1.0
@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  * 
  * @author Robin <robin@cubettech.com>
- * @Date 23-10-2013
+ * @Date 12-11-2013
  */
 //mongo configure
 module.exports = {

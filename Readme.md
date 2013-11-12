@@ -36,9 +36,9 @@ See in action @ port `3001`
   * MVC Architecture
   * Simple folder structures
   * Easy to get started
-  * Change the configurations easily from config file
-  * Socket.io support for realtime webapps
-  * Flexible as node.js
+  * Configure web apps easily
+  * Combine with Socket.io to develop great realtime webapps
+  * Flexible as express
 
 ## License
 
