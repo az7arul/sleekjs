@@ -37,7 +37,8 @@ global.appPath = path.dirname(require.main.filename);
 global.HELPER ={};
 require(path.join(appPath,'application/config/defines.js'));
 require('./db.js');
-    
+require(path.join(appPath,'system/lib/handhelpers.js'));
+var f = require(path.join(appPath,'system/lib/functions.js'));
 
 //set loggings as in config
 if(sleekConfig.logToFile == true) {
@@ -65,14 +66,14 @@ global.system = {
      * get model object
      * pass model name. example; for userModel pass user
      * 
-     * @param char name model name, ignoring trailing 'Model'
-     * @returns model object
+     * @param char model model name, ignoring trailing 'Model'
+     * @return model object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    getModel: function(m){
+    getModel: function(model){
         try {
-            return require(path.join(appPath, 'application/models',m+'Model.js'));
+            return require(path.join(appPath, 'application/models',model+'Model.js'));
         } catch (err) {
             this.log(err);
         }
@@ -80,29 +81,35 @@ global.system = {
     /**
      * get a library object
      * 
-     * @param char name libraryname name
-     * @returns library object
+     * @param char lib library name
+     * @return library object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    getLibrary: function(l){
+    getLibrary: function(lib){
         try {
-            return require(path.join(appPath ,'lib',l+'.js'));
+            return require(path.join(appPath ,'lib',lib+'.js'));
         } catch (err) {
             this.log(err);
         }
     },
     /**
-     * get a helpers object
+     * load a helpers object
      * 
-     * @param char name helper name
-     * @returns helper object
+     * @param char/object helper helper name
+     * @return helper object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    getHelper: function(h){
+    loadHelper: function(helper){
         try {
-            global.HELPER[h]= require(path.join(appPath ,'application/helpers',h+'.js'));
+            if(helper instanceof Object) {
+                for(var h in helper) {
+                    f.extendJSON(global.HELPER, require(path.join(appPath ,'application/helpers',helper[h]+'.js')));
+                }
+            } else {
+                f.extendJSON(global.HELPER, require(path.join(appPath ,'application/helpers',helper+'.js')));
+            }
         } catch (err) {
             this.log(err);
         }
@@ -110,14 +117,14 @@ global.system = {
     /**
      * get a controller object
      * 
-     * @param c controller name
-     * @returns controller object
+     * @param char controller controller name
+     * @return controller object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    getController: function(c){
+    getController: function(controller){
         try {
-            return require(path.join(appPath,'application/controllers',c+'.js'));
+            return require(path.join(appPath,'application/controllers',controller+'.js'));
         } catch (err) {
             this.log(err);
         }

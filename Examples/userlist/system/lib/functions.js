@@ -1,10 +1,8 @@
-/* 
- * Routing functions
- * Add your routes functions here 
+/*
+ * System functions
  * 
  * @package Sleek.js
  * @version 1.0
- * 
  * 
  * The MIT License (MIT)
 
@@ -29,14 +27,19 @@
  * THE SOFTWARE.
  * 
  * @author Robin <robin@cubettech.com>
- * @Date 23-10-2013
+ * @Date 12-11-2013
  */
 
-//define route functions here
-var routeHelper = {
-    helper: function(){
-        console.log ('helper is working fine');
-    }
-}
 
-module.exports = routeHelper;
+//Function to extend a json
+module.exports = {
+    extendJSON:function (target) {
+        var sources = [].slice.call(arguments, 1);
+        sources.forEach(function (source) {
+            for (var prop in source) {
+                target[prop] = source[prop];
+            }
+        });
+        return target;
+    }
+};

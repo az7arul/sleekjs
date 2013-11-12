@@ -1,6 +1,6 @@
 {
   "name": "sleek.js",
-  "version": "0.1.63",
+  "version": "0.1.65",
   "homepage": "http://www.sleekjs.com",
   "title": "Fully flexible mvc framework for node.js, developed using express, handlebars, mongodb as base dependecies",
   "keywords": [
@@ -24,7 +24,7 @@
     "site"
   ],
   "author": "Cubet Techno Labs, Cochin <info@cubettech.com>",
-  "description": "Sleek.js is an MVC Framework implemented from Node.JS, built-in with base dependency on handlebars.js, express.js. Sleek.js architecture follows common format of MVC which makes it easy to handle and build better sites. Easy integration of socket.io for realtime webapps",
+  "description": "Sleek.js is an MVC Framework implemented from Node.JS, built-in with base dependency on handlebars.js, express.js. Sleek.js architecture follows common format of MVC which makes it easy to handle and build better web apps",
   "contributors": [ 
     {
       "name": "Cubet Techno Labs",
