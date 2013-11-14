@@ -66,7 +66,7 @@ global.system = {
      * get model object
      * pass model name. example; for userModel pass user
      * 
-     * @param char model model name, ignoring trailing 'Model'
+     * @param model model name, ignoring trailing 'Model'
      * @return model object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -81,7 +81,7 @@ global.system = {
     /**
      * get a library object
      * 
-     * @param char lib library name
+     * @param lib library name
      * @return library object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -96,7 +96,7 @@ global.system = {
     /**
      * load a helpers object
      * 
-     * @param char/object helper helper name
+     * @param helper helper name
      * @return helper object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -117,7 +117,7 @@ global.system = {
     /**
      * get a controller object
      * 
-     * @param char controller controller name
+     * @param controller controller name
      * @return controller object
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -134,14 +134,17 @@ global.system = {
      * Set a partial file to load in view
      * can load partial from view, using {{> partialname data}}
      * 
-     * @param char path file path from view folder
-     * @param char name Set a name for partial to load in view
+     * @param partial file path from view folder
+     * @param name Set a name for partial to load in view
      * 
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
     setPartial: function(partial, name){
         try {
+            if(!name){
+                name = partial;
+            }
             var realPath  = path.join(appPath,'application/views',sleekConfig.theme, partial+'.html');
             if (! fs.existsSync(realPath)) {
                 realPath = path.join(appPath,'application/views/default',partial+'.html');
@@ -158,9 +161,9 @@ global.system = {
     /**
      * Load view
      * 
-     * @param object response res object
-     * @param char view name file path from view folder
-     * @param object data Set data to load in view
+     * @param res response object
+     * @param view file path from view folder
+     * @param passedData Set data to load in view
      * 
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -222,8 +225,8 @@ global.system = {
     /**
      * Write log
      * 
-     * @param char path file path from view folder
-     * @param char name Set a name for partial to load in view
+     * @param str string to log error
+     * @param status Optional log status
      * 
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
@@ -240,6 +243,39 @@ global.system = {
                 console.log(log);
             }
         }
+    },
+    /**
+     * Get compiled handlebars template with data
+     * 
+     * @param name file path from view folder
+     * @param data Data to compile with template
+     * 
+     * @author Robin <robin@cubettech.com>
+     * @Date 13-11-2013
+     */
+    getCompiledView: function(name, data){
+        try {
+            if(!name){
+                throw 'Please supply template name to compile'
+            }
+            var realPath  = path.join(appPath,'application/views',sleekConfig.theme, name+'.html');
+            if (! fs.existsSync(realPath)) {
+                realPath = path.join(appPath,'application/views/default',name+'.html');
+            }
+            var templateFile = fs.readFileSync(realPath, 'utf8');
+            var template = hbs.compile(templateFile);
+            var compiled;
+            if(data){
+                compiled = template(data);
+            } else {
+                compiled = template();
+            }
+            return compiled;
+        }
+        catch (err) {
+            this.log(err);
+        }
+        
     }
 };
 

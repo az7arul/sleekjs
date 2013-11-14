@@ -10,6 +10,8 @@ For documentation and other details. navigate to [Sleek.js](http://www.sleekjs.c
 
 See realtime demo at [Sleek.js Demo](http://demo.sleekjs.com)
 
+Need support ? [Sleek.js Support](http://support.sleekjs.com)
+
 [Cubet Techno Labs. Pvt. Ltd.](http://www.cubettech.com) owns and maintains Sleek.Js code and posts frequent updates. If you have any queries please feel free to contact us at <info@cubettech.com>
 
 ## Change Logs
