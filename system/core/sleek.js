@@ -283,7 +283,21 @@ module.exports = function(app){
     try {
         var R = require(path.join(appPath, 'application/config/routes.js'));
         var Helper = require(path.join(appPath, 'application/helpers/routes.js'));
-
+         
+        var commonfns = [];
+        if(R.commonRouteFunctions) {
+            for(var i in R.commonRouteFunctions){
+                var ct = R.commonRouteFunctions[i];
+                if(Helper[ct] instanceof Function) {
+                    var sc = Helper[ct] ? Helper[ct] : function(req,res,next){
+                        next();
+                    };
+                    commonfns.push(sc);
+                }
+            }
+        } else {
+            commonfns = function(req,res,next){ next(); };
+        }
         var rts = [];
         for(var c in R.routes) {
             var rt = R.routes[c];
@@ -298,9 +312,9 @@ module.exports = function(app){
             };
             
             if(rt.type && rt.type == "POST") {
-                app.post(rout, fn, rts[c][act]);
+                app.post(rout, commonfns, fn, rts[c][act]);
             } else {
-                app.get(rout, fn, rts[c][act]);
+                app.get(rout, commonfns, fn, rts[c][act]);
             }
 
         }

@@ -37,4 +37,5 @@ exports.routes = [
     {route: '/', controller: 'index', action:'index'},
 ];
 
-
+//Define common function namess
+exports.commonRouteFunctions = ['DefineLocals'];
