@@ -40,6 +40,18 @@ require('./db.js');
 require(path.join(appPath,'system/lib/handhelpers.js'));
 var f = require(path.join(appPath,'system/lib/functions.js'));
 
+//load custom config libraries
+if(sleekConfig.configLibs){
+    for(var i in sleekConfig.configLibs){
+        try {
+            require(path.join(appPath,'lib', sleekConfig.configLibs[i]+'.js'));
+        } catch(err){
+            console.log(err);
+        }
+    }
+    
+}
+
 //set loggings as in config
 if(sleekConfig.logToFile == true) {
     var access = fs.createWriteStream(path.join(appPath, sleekConfig.accesslog), {

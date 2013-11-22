@@ -1,5 +1,5 @@
 /** 
- * Configuration
+ * Mongoose Configuration
  * 
  * @package Sleek.js
  * @version 1.0
@@ -27,23 +27,14 @@
  * THE SOFTWARE.
  * 
  * @author Robin <robin@cubettech.com>
- * @Date 23-10-2013
+ * @Date 22-11-2013
  */
 
-//port number
-global.sleekConfig.appPort = 3001;
-
-global.sleekConfig.siteUrl = 'http://localhost:3001'
-
-global.sleekConfig.env = 'development';
-
-//themeing
-global.sleekConfig.theme = 'default';
-
-global.sleekConfig.configLibs = ['mongoose'];
-
-//logging
-global.sleekConfig.logToFile = false; // if true, logs will write to file instead of console.
-global.sleekConfig.accesslog = 'application/var/logs/access.log'; // logging each access
-global.sleekConfig.errorlog = 'application/var/logs/error.log'; // application errors
-global.sleekConfig.systemlog = 'application/var/logs/system.log'; // manual logging
+//mongoose configure
+module.exports = {
+    dbHost:'localhost',
+    dbPort: '',
+    dbName : 'sleek',
+    dbUser : '',
+    dbPass : ''
+}
