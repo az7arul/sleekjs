@@ -330,14 +330,29 @@ module.exports = function(app){
             }
 
         }
-
-	process.on('uncaughtException', function (err) {
-      		console.log('Caught exception: ' + err);
-    	});
     } catch (e){
         system.log(e);
     }
     app.get('*/([A-Za-z0-9_]+)', function(req, res){
-        system.loadView(res,'error');
-    });                                                                                                                                                                                                               
+        var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
+        if (! fs.existsSync(realPath)) {
+            realPath = path.join(__dirname,'error.html');
+        } 
+        var templateFile = fs.readFileSync(realPath, 'utf8');
+        var template = hbs.compile(templateFile);
+        var compiled = template({title:'404! Page Not Found'});
+        res.send(compiled);
+    });
+    
+    app.use(function(err, req, res, next){
+        res.status(err.status || 500);
+        var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
+        if (! fs.existsSync(realPath)) {
+            realPath = path.join(__dirname,'error.html');
+        } 
+        var templateFile = fs.readFileSync(realPath, 'utf8');
+        var template = hbs.compile(templateFile);
+        var compiled = template({ title:'Application Error', error: err.stack });
+        res.send(compiled);
+    });
 }
