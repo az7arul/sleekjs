@@ -40,7 +40,7 @@ global.sleekConfig.env = 'development';
 //themeing
 global.sleekConfig.theme = 'default';
 
-global.sleekConfig.configLibs = ['mongoose'];
+global.sleekConfig.configLibs = [];
 
 //logging
 global.sleekConfig.logToFile = false; // if true, logs will write to file instead of console.

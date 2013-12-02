@@ -47,7 +47,7 @@ app.configure(function(){
     app.set('port', process.env.PORT || sleekConfig.appPort);
     app.set('views', path.join(__dirname, 'application/views'));
     app.set('view engine', 'handlebars');
-    app.engine('html',  exphbs({defaultLayout: path.join(__dirname, 'application/layouts/default'),
+    app.engine('html',  exphbs({defaultLayout: 'default',
                                 layoutsDir: path.join(__dirname, 'application/layouts/'), extname:".html"})
                 ); 
     app.use(express.favicon(path.join(__dirname, 'public/favicon.ico'))); 

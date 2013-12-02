@@ -330,6 +330,10 @@ module.exports = function(app){
             }
 
         }
+
+	process.on('uncaughtException', function (err) {
+      		console.log('Caught exception: ' + err);
+    	});
     } catch (e){
         system.log(e);
     }
