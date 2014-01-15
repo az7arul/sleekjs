@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sleek Js</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="/default/css/style.css" />
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        {{> getSleekScripts}}  
+        {{!Add sleek rendered scripts here}}
+        
+        <script>
+            var socket = io.connect('{{siteURL}}');
+            socket.on('connect', function () {
+                socket.on('useradd', function (msg) {
+                    $('.userlist table').prepend(msg.user);
+                    initDeleteUser();
+                });
+                socket.on('userremove', function (msg) {
+                    $('.userlist').find('#'+msg.id).remove();;
+                });
+            });
+            $(function(){
+                $('.addUser').live('click', function(){
+                    $.ajax({
+                        type:'post',
+                        data: $('form').serialize(),
+                        url: $('form').attr('action'),
+                        success: function(){
+                            $('form')[0].reset();
+                        }
+                    });
+                });
+                initDeleteUser()
+            });
+            
+            function initDeleteUser(){
+                $('.removeUser').unbind('click').bind('click', function(){
+                    var id = $(this).attr('data-id');
+                    $.ajax({
+                        type:'get',
+                        url: '/remove/'+id
+                    });
+                });
+            }
+        </script>
+    </head>
+    <body>
+        {{{body}}}
+        {{!Render view here}}
+    </body>
+</html>

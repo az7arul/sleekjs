@@ -1,0 +1,31 @@
+<div class="sub_container">
+    <div class="logo-col"><img src="/default/images/logo.png" alt=""> </div>
+    <h2>Realtime Webapp Demo</h2>
+    <div class="sub_cnt_col">
+        <div >
+        <form action="/adduser" method="post">
+            <input type="text" name="name" placeholder="Name">
+            <input type="text" name="place" placeholder="Place">
+            <input type="text" name="age" placeholder="Age">
+            <input type="button" value="Save" class="addUser"/>
+        </form>
+        </div>
+        <div class="userlist">
+            <table width="100%" border="0">
+                {{#each users}}
+                <tr id="{{_id}}">
+                  <td width="20%" bgcolor="#f4f4f4">{{name}}</td>
+                  <td width="44%" bgcolor="#f4f4f4">{{place}}</td>
+                  <td width="43%" bgcolor="#f4f4f4">{{age}}</td>
+                  <td width="46%" bgcolor="#f4f4f4"><a class="removeUser" data-id="{{_id}}" href="javascript:void(0);"></a></td>
+                </tr>
+                {{/each}}
+            </table> 
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div class="footer">
+        <p>Sleek.js © All Rights Reserved 2013</p>
+        <p>Powered by <a href="http://cubettech.com" target="_blank">Cubet Techno Labs, Cochin</a></p>
+    </div>
+</div>
