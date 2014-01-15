@@ -32,6 +32,7 @@
 
 //port number
 global.sleekConfig.appPort = 3001;
+
 global.sleekConfig.appHost = 'localhost';
 
 global.sleekConfig.env = 'development';

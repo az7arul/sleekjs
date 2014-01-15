@@ -66,8 +66,9 @@ app.configure(function(){
     app.set('strict routing');
     app.use(app.router);
 });
+
 //set Site url
-global.sleekConfig.siteUrl = 'http://'+app.get('host')+':'+app.get('port')
+global.sleekConfig.siteUrl = 'http://'+app.get('host')+':'+app.get('port');
 //get configs
 require('./system/core/sleek.js')(app);
 
