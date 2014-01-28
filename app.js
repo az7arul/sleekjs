@@ -64,14 +64,12 @@ app.configure(function(){
     app.use(express.session());
     app.use(express.static(path.join(__dirname, 'public')));
     app.set('strict routing');
-    app.use(app.router);
 });
 
 //set Site url
 global.sleekConfig.siteUrl = 'http://'+app.get('host')+':'+app.get('port');
 //get configs
 require('./system/core/sleek.js')(app);
-
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());

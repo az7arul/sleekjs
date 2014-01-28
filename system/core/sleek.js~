@@ -41,26 +41,6 @@ require('./db.js');
 require(path.join(appPath,'system/lib/handhelpers.js'));
 var _fns = require(path.join(appPath,'system/lib/functions.js'));
 
-app.use(function(req,res,next){
-        res.sleekReq = req;
-        next();
-});
-
-//handle 500
-app.use(function(err, req, res, next){
-    res.status(err.status || 500);
-    var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
-    if (! fs.existsSync(realPath)) {
-        realPath = path.join(__dirname,'error.html');
-    } 
-    var templateFile = fs.readFileSync(realPath, 'utf8');
-    var template = hbs.compile(templateFile);
-    var compiled = template({ title:'Application Error', error: err.stack });
-    res.send(compiled);
-});
-
-app.use(app.router);
-
 //load custom config libraries
 if(sleekConfig.configLibs){
     for(var i in sleekConfig.configLibs){
@@ -173,7 +153,7 @@ global.system = {
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    setPartial: function(partial, name){
+    setPartial: function(partial, name ){
         try {
             if(!name){
                 name = partial;
@@ -183,95 +163,6 @@ global.system = {
                 realPath = path.join(appPath,'application/views/default',partial+'.html');
             }
             var template = fs.readFileSync(realPath, 'utf8');
-            var plugsDir = fs.readdirSync(path.join(appPath,'modules'));
-            async.eachSeries(plugsDir, function (plug, _pcbk) {
-                var stats = fs.statSync(path.join(appPath,'modules',plug));
-                if(stats.isDirectory() && plug.charAt(0) != '.'){
-                    var Ovr = require(path.join(appPath,'modules',plug, 'override.js'));
-                    async.eachSeries(Ovr.data, function (ovdta, _ovdbk) {
-                        if(ovdta.view == partial){
-                            var _m = ovdta.mode;
-                            if(_m == 'override'){
-                                realPath  = path.join(appPath,'modules',plug,'views',partial+'.html');
-                                template = fs.readFileSync(realPath, 'utf8');
-                                _ovdbk();
-                            } else if (_m == 'prepend' || _m == 'append' || _m == 'replace') {
-                                if(ovdta.controller && ovdta.action){
-                                    var M = system.getPluginController(ovdta.controller,plug);
-                                    var fn = M[ovdta.action];
-                                    fn(function(dt){
-                                        if(_m == 'prepend') {
-                                            template = dt + template;
-                                        } else if (_m == 'append') {
-                                            template += dt;
-                                        } else {
-                                            template = template;
-                                        }
-                                        _ovdbk();
-                                    });
-                                } else {
-                                    realPath  = path.join(appPath,'modules',plug,'views',partial+'.html');
-                                    var dt = fs.readFileSync(realPath, 'utf8');
-                                    if(_m == 'prepend') {
-                                        template = dt + template;
-                                    } else if (_m == 'append') {
-                                        template += dt;
-                                    } else {
-                                        template = template;
-                                    }
-                                    _ovdbk();
-                                }
-                                
-                            } else {
-                                _ovdbk();
-                            }
-                        } else {
-                            _ovdbk();
-                        }
-                    }, function(){
-                        _pcbk();
-                    });
-                } else {
-                    _pcbk();
-                }
-            }, function(){
-                hbs.registerPartial(name, template);
-            });
-        }
-        catch (err) {
-            this.log(err);
-        }
-        
-    },
-    /**
-     * Set a plugin partial file to load in view
-     * can load partial from view, using {{> partialname data}}
-     * 
-     * @param partial file path from view folder
-     * @param name Set a name for partial to load in view
-     * @param plugin (Optional) Plugin name
-     * 
-     * @author Robin <robin@cubettech.com>
-     * @Date 28-01-2014
-     */
-    setPluginPartial: function(partial, name , plugin){
-        try {
-            //if calling from plugins controller
-            if(!plugin){
-                var pt = _fns._getCallerFile();
-                plugin = pt.split('/');
-                if(plugin[plugin.indexOf('controllers')-2] == 'modules') {
-                    plugin = plugin[plugin.indexOf('controllers')-1]
-                } else {
-                    this.log('Please specify plugin name');
-                }
-            }
-            if(!name){
-                name = partial;
-            }
-            var realPath  = path.join(appPath,'modules',plugin,'views',partial+'.html');
-           
-            var template = fs.readFileSync(realPath, 'utf8');
             hbs.registerPartial(name, template);
         }
         catch (err) {
@@ -279,6 +170,7 @@ global.system = {
         }
         
     },
+    
     /**
      * Load view
      * 
@@ -291,6 +183,7 @@ global.system = {
      */
     loadView: function(res, view, passedData){
         try {
+            
             var pt = _fns._getCallerFile();
             var plugin = pt.split('/');
             var caller = plugin[plugin.indexOf('controllers')-1];
@@ -305,23 +198,22 @@ global.system = {
                             var prio = _ovDt.priority ? _ovDt.priority : 0;
                             var _mode = _ovDt.mode;
                             if(_mode == 'override'){
-                                system.loadPluginView(res,view,passedData,plug);
+                                this.loadPluginView(res,view,passedData,plug);
                                 _ovcbk();
                                 return;
                             } else if(_mode == 'controll'){
                                 var M = system.getPluginController(_ovDt.controller,plug);
                                 var fn = M[_ovDt.action];
-                                fn(res.sleekReq,res,passedData);
+                                fn(res,passedData);
                                 _ovcbk();
                                 return;
                             } else if(_mode == 'append' || _mode == 'prepend' || _mode == 'replace'){
-                                passedData.locals = res.locals;
                                 if(!passedData.PLUGINS){
                                     passedData.PLUGINS =  [];
                                 }
                                 var M = system.getPluginController(_ovDt.controller,plug);
                                 var fn = M[_ovDt.action];
-                                fn(res.sleekReq,res,passedData,function(dt){
+                                fn(function(passedData,dt){
                                      passedData.PLUGINS.push({data:dt, mode:_mode, prio:prio});
                                      _ovcbk();
                                 });
@@ -409,21 +301,18 @@ global.system = {
      * @Date 23-10-2013
      */
     log: function(str, status){
-       var cf = _fns._getCalleeFile();
-       var cl = _fns._getCalleeLine();
-       if(!status) {
-           status = 'Error';
-       }
-       if(str) {
-           var log = status + ' :: ' + new Date() + ' :\n';
-           log += str + ' - ' + cf + ' on line ' + cl + '\n';
-           if(sleekConfig.logToFile == true) {
-               fs.appendFile(path.join(appPath, sleekConfig.systemlog), log, function (err) {});
-           } else {
-               console.log(log);
-           }
-       }
-   },
+        if(!status) {
+            status = 'Error';
+        }
+        if(str) {
+            var log = status + ' :: ' + new Date() + ' :: ' + str + '\n';
+            if(sleekConfig.logToFile == true) {
+                fs.appendFile(path.join(appPath, sleekConfig.systemlog), log, function (err) {});
+            } else {
+                console.log(log);
+            }
+        }
+    },
     /**
      * Get compiled handlebars template with data
      * 
@@ -433,7 +322,7 @@ global.system = {
      * @author Robin <robin@cubettech.com>
      * @Date 13-11-2013
      */
-    getCompiledView: function(name, data, raw){
+    getCompiledView: function(name, data){
         try {
             if(!name){
                 throw 'Please supply template name to compile'
@@ -443,18 +332,14 @@ global.system = {
                 realPath = path.join(appPath,'application/views/default',name+'.html');
             }
             var templateFile = fs.readFileSync(realPath, 'utf8');
-            if(raw) {
-                return templateFile;
+            var template = hbs.compile(templateFile);
+            var compiled;
+            if(data){
+                compiled = template(data);
             } else {
-                var template = hbs.compile(templateFile);
-                var compiled;
-                if(data){
-                    compiled = template(data);
-                } else {
-                    compiled = template();
-                }
-                return compiled;
+                compiled = template();
             }
+            return compiled;
         }
         catch (err) {
             this.log(err);
@@ -596,7 +481,7 @@ global.system = {
      * @author Robin <robin@cubettech.com>
      * @Date 22-01-2014
      */
-    getCompiledPluginView: function(name, data, plugin, raw){
+    getCompiledPluginView: function(name, data, plugin){
         try {
             //if calling from plugins controller
             if(!plugin){
@@ -618,18 +503,14 @@ global.system = {
                 realPath = path.join(appPath,'application/views/default',name+'.html');
             }
             var templateFile = fs.readFileSync(realPath, 'utf8');
-            if(raw){
-                return templateFile;
+            var template = hbs.compile(templateFile);
+            var compiled;
+            if(data){
+                compiled = template(data);
             } else {
-                var template = hbs.compile(templateFile);
-                var compiled;
-                if(data){
-                    compiled = template(data);
-                } else {
-                    compiled = template();
-                }
-                return compiled;
+                compiled = template();
             }
+            return compiled;
         }
         catch (err) {
             this.log(err);
@@ -735,7 +616,7 @@ module.exports = function(app){
             var fn = Helper[rt.fn] ? Helper[rt.fn] : function(req,res,next){
                 next();
             };
-                        
+            
             if(rt.type && rt.type == "POST") {
                 app.post(rout, commonfns, fn, rts[c][act]);
             } else {
@@ -743,34 +624,45 @@ module.exports = function(app){
             }
 
         }
-        
-        //file server for plugins & themes
-        app.get('/assets/:mod?/:plugin?/:type?/:file?', function(req, res){
-            if(!req.params.plugin || !req.params.type || !req.params.file || !req.params.mod) {
-                res.end();
-                return false;
-            } 
-            if(req.params.mod == 'modules'){
-                res.sendfile(path.join(appPath,'modules',req.params.plugin,'assets',req.params.type,req.params.file));
-            } else if (req.params.mod == 'themes') {
-                res.sendfile(path.join(appPath,'application/views',req.params.plugin,'assets',req.params.type,req.params.file));
-            }
-        });
-
-        //handle unknown requests
-        app.get('*/([A-Za-z0-9_]+)', function(req, res){
-            var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
-            if (! fs.existsSync(realPath)) {
-                realPath = path.join(__dirname,'error.html');
-            } 
-            var templateFile = fs.readFileSync(realPath, 'utf8');
-            var template = hbs.compile(templateFile);
-            var compiled = template({title:'404! Page Not Found'});
-            res.send(compiled);
-        });
-
-
     } catch (e){
         system.log(e);
     }
+    
+    //file server for plugins & themes
+    app.get('/assets/:mod?/:plugin?/:type?/:file?', function(req, res){
+        if(!req.params.plugin || !req.params.type || !req.params.file || !req.params.mod) {
+            res.end();
+            return false;
+        } 
+        if(req.params.mod == 'modules'){
+            res.sendfile(path.join(appPath,'modules',req.params.plugin,'assets',req.params.type,req.params.file));
+        } else if (req.params.mod == 'themes') {
+            res.sendfile(path.join(appPath,'application/views',req.params.plugin,'assets',req.params.type,req.params.file));
+        }
+    });
+    
+    //handle unknown requests
+    app.get('*/([A-Za-z0-9_]+)', function(req, res){
+        var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
+        if (! fs.existsSync(realPath)) {
+            realPath = path.join(__dirname,'error.html');
+        } 
+        var templateFile = fs.readFileSync(realPath, 'utf8');
+        var template = hbs.compile(templateFile);
+        var compiled = template({title:'404! Page Not Found'});
+        res.send(compiled);
+    });
+    
+    //handle 500
+    app.use(function(err, req, res, next){
+        res.status(err.status || 500);
+        var realPath  = path.join(appPath,'application/views',sleekConfig.theme, 'error.html');
+        if (! fs.existsSync(realPath)) {
+            realPath = path.join(__dirname,'error.html');
+        } 
+        var templateFile = fs.readFileSync(realPath, 'utf8');
+        var template = hbs.compile(templateFile);
+        var compiled = template({ title:'Application Error', error: err.stack });
+        res.send(compiled);
+    });
 }

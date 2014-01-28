@@ -30,7 +30,9 @@
  * @Date 12-11-2013
  */
 
-Handlebars = require('handlebars'); 
+var Handlebars = require('handlebars'),
+path = require('path'), 
+fs = require('fs');
 
 //helper function
 Handlebars.registerHelper('$', function(name, args) {

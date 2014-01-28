@@ -33,7 +33,7 @@
 module.exports = {
     dbHost:'localhost',
     dbPort: '',
-    dbName : 'sleek',
+    dbName : 'nodetest',
     dbUser : '',
     dbPass : ''
 }
