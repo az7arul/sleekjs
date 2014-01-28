@@ -30,7 +30,9 @@
  * @Date 12-11-2013
  */
 
-Handlebars = require('handlebars'); 
+var Handlebars = require('handlebars'),
+path = require('path'), 
+fs = require('fs');
 
 //helper function
 Handlebars.registerHelper('$', function(name, args) {
@@ -45,4 +47,52 @@ Handlebars.registerHelper('$', function(name, args) {
    
 });
 
+//helper function
+Handlebars.registerHelper('$part', function(partial, data, plugin) {
+     try {
+          
+        var realPath  = path.join(appPath,'application/views',sleekConfig.theme, partial+'.html');
+        if(typeof(plugin) == 'string') {
+            realPath  = path.join(appPath,'modules',plugin,'views',partial+'.html');
+        } else if (! fs.existsSync(realPath)){
+            realPath = path.join(appPath,'application/views/default',partial+'.html');
+        }
+        var templateFile = fs.readFileSync(realPath, 'utf8');
+        var template = Handlebars.compile(templateFile);
+        var compiled;
+        if(data){
+            compiled = template(data);
+        } else {
+            compiled = template();
+        }
+         
+        //get plugin overrides
+        var plugsDir = fs.readdirSync(path.join(appPath,'modules'));
+        for(var p in plugsDir) {
+            var stats = fs.statSync(path.join(appPath,'modules',plugsDir[p]));
+            if(stats.isDirectory() && plugsDir[p].charAt(0) != '.'){
+                var Ovr = require(path.join(appPath,'modules',plugsDir[p], 'override.js'));
+                for(var c in Ovr.data) {
+                    if(Ovr.data[c].view == partial){
+                        var _m = Ovr.data[c].mode;
+                        if(_m == 'override'){
+                            compiled = system.getCompiledPluginView(partial,data,plugsDir[p]);
+                        } else if (_m == 'prepend') {
+                            compiled = system.getCompiledPluginView(partial,data,plugsDir[p]) + compiled;
+                        } else if (_m == 'append') {
+                            compiled += system.getCompiledPluginView(partial,data,plugsDir[p]);
+                        } else if(_m != 'controll'){
+                            compiled = system.getCompiledPluginView(partial,data,plugsDir[p]);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return new Handlebars.SafeString(compiled);
+    }
+    catch (err) {
+        system.log(err);
+    }   
+});
 

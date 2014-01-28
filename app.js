@@ -45,7 +45,7 @@ app.configure(function(){
     app.set('env', sleekConfig.env);
     // all environments
     app.set('port', process.env.PORT || sleekConfig.appPort);
-    app.set('host', sleekConfig.appHost);
+    app.set('host', sleekConfig.appHost ? sleekConfig.appHost : 'localhost');
     app.set('views', path.join(__dirname, 'application/views'));
     app.set('view engine', 'handlebars');
     app.engine('html',  exphbs({defaultLayout: 'default',

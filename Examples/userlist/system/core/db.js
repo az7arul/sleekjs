@@ -36,8 +36,8 @@ var fs = require('fs');
 try {
     //depricated function call
     if(sleekConfig.dbHost && sleekConfig.dbName){
-        console.log('This method has been deprecated! sleek.js doesn\'t use mongoose. ! please update your models. ');
-        console.log('Docs at http://sleekjs.com/docs ');
+        console.log('Sleek.js doesn\'t use mongoose by default. ! BTW, You can continue using mongoose, by adding as a library');
+        console.log('See Docs at http://sleekjs.com/docs. ');
         console.log('changelog at http://sleekjs.com/change-log ');
         global.mongoose = require('mongoose');
         var options = {

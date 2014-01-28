@@ -29,10 +29,12 @@
  * @author Robin <robin@cubettech.com>
  * @Date 12-11-2013
  */
-
+var path = require('path');
+var fs = require('fs');
+var async = require('async');
 
 //Function to extend a json
-module.exports = {
+var fns = {
     extendJSON:function (target) {
         var sources = [].slice.call(arguments, 1);
         sources.forEach(function (source) {
@@ -41,5 +43,103 @@ module.exports = {
             }
         });
         return target;
+    },
+    _getCallerFile: function() {
+        try {
+            var err = new Error(),callerfile,currentfile;       
+            Error.prepareStackTrace = function (err, stack) {return stack;};
+            err.stack.shift();
+            currentfile=err.stack.shift().getFileName();
+            while (err.stack.length) {
+                callerfile = err.stack.shift().getFileName();
+                if(currentfile!==callerfile) return callerfile;
+            }
+        } catch (err) {}
+            return undefined;
+    },
+    _getCalleeFile: function() {
+        try {
+            var err = new Error(),callerfile,currentfile; 
+            err.stack.shift();
+            Error.prepareStackTrace = function (err, stack) {return stack;};
+            currentfile=err.stack.shift().getFileName();
+            while (err.stack.length) {
+                callerfile = err.stack.shift().getFileName();
+                if(currentfile!==callerfile) return callerfile;
+            }
+        } catch (err) {}
+            return undefined;
+    },
+    _getCalleeLine: function(){
+       try {
+           var err = new Error(),callerfile,currentfile;      
+           Error.prepareStackTrace = function (err, stack) {return stack;};
+           err.stack.shift();
+           currentfile=err.stack.shift().getLineNumber();
+           while (err.stack.length) {
+               callerfile = err.stack.shift().getLineNumber();
+               if(currentfile!==callerfile) return callerfile;
+           }
+       } catch (err) {}
+           return undefined;
+    },
+    _rand: function(count)
+    {
+        count = typeof count !== 'undefined' ? count : 12;
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+
+        for( var i=0; i < count; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    },
+    _render: function(res,view,passedData){
+        var cmp = system.getCompiledView(view, passedData,true);
+        var fname = this._rand() + new Date().getTime()+ '.html';
+        if (!fs.existsSync(path.join(appPath,'application/var/tmp/'))){
+            fs.mkdirSync(path.join(appPath,'application/var/tmp/'), 0777)
+        }
+        
+        if(passedData && passedData.PLUGINS){
+            passedData.PLUGINS.sort(fns._compare);
+            async.eachSeries(passedData.PLUGINS, function (plug, clbk) {
+                if(plug.mode == 'prepend'){
+                    cmp = plug.data + cmp;
+                } else if (plug.mode == 'replace') {
+                    cmp = plug.data;
+                } else {
+                    cmp += plug.data;
+                }
+                clbk();
+            }, function(){
+                fns._makeView(res,fname,cmp,passedData);
+            });
+            
+        } else {
+            fns._makeView(res,fname,cmp,passedData);
+        }
+        
+         
+    },
+    _makeView: function(res,fname,data,passedData){
+        fs.writeFile(path.join(appPath,'application/var/',"/tmp/", fname), data, function(err) {
+            if(err) {
+                console.log(err);
+            }
+            res.render(path.join(appPath,'application/var/',"/tmp/", fname), passedData, function(er, html){
+              fs.unlink(path.join(appPath,'application/var/',"/tmp/", fname))
+              res.send(html);
+            });
+        });
+    },
+    _compare: function (a,b) {
+        if (a.prio < b.prio)
+           return -1;
+        if (a.prio > b.prio)
+          return 1;
+        return 0;
     }
 };
+
+module.exports = fns;
