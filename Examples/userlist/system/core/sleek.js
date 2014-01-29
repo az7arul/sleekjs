@@ -173,7 +173,7 @@ global.system = {
      * @author Robin <robin@cubettech.com>
      * @Date 23-10-2013
      */
-    setPartial: function(partial, name ){
+    setPartial: function(partial, name){
         try {
             if(!name){
                 name = partial;
@@ -183,6 +183,95 @@ global.system = {
                 realPath = path.join(appPath,'application/views/default',partial+'.html');
             }
             var template = fs.readFileSync(realPath, 'utf8');
+            var plugsDir = fs.readdirSync(path.join(appPath,'modules'));
+            async.eachSeries(plugsDir, function (plug, _pcbk) {
+                var stats = fs.statSync(path.join(appPath,'modules',plug));
+                if(stats.isDirectory() && plug.charAt(0) != '.'){
+                    var Ovr = require(path.join(appPath,'modules',plug, 'override.js'));
+                    async.eachSeries(Ovr.data, function (ovdta, _ovdbk) {
+                        if(ovdta.view == partial){
+                            var _m = ovdta.mode;
+                            if(_m == 'override'){
+                                realPath  = path.join(appPath,'modules',plug,'views',partial+'.html');
+                                template = fs.readFileSync(realPath, 'utf8');
+                                _ovdbk();
+                            } else if (_m == 'prepend' || _m == 'append' || _m == 'replace') {
+                                if(ovdta.controller && ovdta.action){
+                                    var M = system.getPluginController(ovdta.controller,plug);
+                                    var fn = M[ovdta.action];
+                                    fn(function(dt){
+                                        if(_m == 'prepend') {
+                                            template = dt + template;
+                                        } else if (_m == 'append') {
+                                            template += dt;
+                                        } else {
+                                            template = template;
+                                        }
+                                        _ovdbk();
+                                    });
+                                } else {
+                                    realPath  = path.join(appPath,'modules',plug,'views',partial+'.html');
+                                    var dt = fs.readFileSync(realPath, 'utf8');
+                                    if(_m == 'prepend') {
+                                        template = dt + template;
+                                    } else if (_m == 'append') {
+                                        template += dt;
+                                    } else {
+                                        template = template;
+                                    }
+                                    _ovdbk();
+                                }
+                                
+                            } else {
+                                _ovdbk();
+                            }
+                        } else {
+                            _ovdbk();
+                        }
+                    }, function(){
+                        _pcbk();
+                    });
+                } else {
+                    _pcbk();
+                }
+            }, function(){
+                hbs.registerPartial(name, template);
+            });
+        }
+        catch (err) {
+            this.log(err);
+        }
+        
+    },
+    /**
+     * Set a plugin partial file to load in view
+     * can load partial from view, using {{> partialname data}}
+     * 
+     * @param partial file path from view folder
+     * @param name Set a name for partial to load in view
+     * @param plugin (Optional) Plugin name
+     * 
+     * @author Robin <robin@cubettech.com>
+     * @Date 28-01-2014
+     */
+    setPluginPartial: function(partial, name , plugin){
+        try {
+            //if calling from plugins controller
+            if(!plugin){
+                var pt = _fns._getCallerFile();
+                plugin = pt.split('/');
+                if(plugin[plugin.indexOf('controllers')-2] == 'modules') {
+                    plugin = plugin[plugin.indexOf('controllers')-1]
+                } else {
+                    this.log('Please specify plugin name');
+                }
+            }
+            if(!name){
+                name = partial;
+            }
+            var realPath  = path.join(appPath,'modules',plugin,'views',partial+'.html');
+           
+            var template = fs.readFileSync(realPath, 'utf8');
             hbs.registerPartial(name, template);
         }
         catch (err) {
@@ -190,7 +279,6 @@ global.system = {
         }
         
     },
-    
     /**
      * Load view
      * 

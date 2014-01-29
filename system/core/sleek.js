@@ -41,6 +41,7 @@ require('./db.js');
 require(path.join(appPath,'system/lib/handhelpers.js'));
 var _fns = require(path.join(appPath,'system/lib/functions.js'));
 
+//for pluggins
 app.use(function(req,res,next){
         res.sleekReq = req;
         next();
@@ -630,41 +631,6 @@ global.system = {
                 }
                 return compiled;
             }
-        }
-        catch (err) {
-            this.log(err);
-        }
-        
-    },
-    /**
-     * Set a partial file to load in view from plugin
-     * can load partial from view, using {{> partialname data}}
-     * 
-     * @param partial file path from view folder
-     * @param name Set a name for partial to load in view
-     * 
-     * @author Robin <robin@cubettech.com>
-     * @Date 22-01-2014
-     */
-    setPluginPartial: function(partial, name, plugin){
-        try {
-            if(!name){
-                name = partial;
-            }
-            
-            if(!plugin){
-                var pt = _fns._getCallerFile();
-                plugin = pt.split('/');
-                if(plugin[plugin.indexOf('controllers')-2] == 'modules') {
-                    plugin = plugin[plugin.indexOf('controllers')-1]
-                } else {
-                    this.log('Please specify plugin name')
-                }
-            }
-            
-            var realPath  = path.join(appPath,'modules',plugin,'views', partial+'.html');
-            var template = fs.readFileSync(realPath, 'utf8');
-            hbs.registerPartial(name, template);
         }
         catch (err) {
             this.log(err);
