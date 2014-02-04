@@ -192,11 +192,7 @@ global.system = {
                     async.eachSeries(Ovr.data, function (ovdta, _ovdbk) {
                         if(ovdta.view == partial){
                             var _m = ovdta.mode;
-                            if(_m == 'override'){
-                                realPath  = path.join(appPath,'modules',plug,'views',partial+'.html');
-                                template = fs.readFileSync(realPath, 'utf8');
-                                _ovdbk();
-                            } else if (_m == 'prepend' || _m == 'append' || _m == 'replace') {
+                            if (_m == 'prepend' || _m == 'append' || _m == 'replace') {
                                 if(ovdta.controller && ovdta.action){
                                     var M = system.getPluginController(ovdta.controller,plug);
                                     var fn = M[ovdta.action];
@@ -305,17 +301,7 @@ global.system = {
                         if(_ovDt.view == view && caller == 'application'){
                             var prio = _ovDt.priority ? _ovDt.priority : 0;
                             var _mode = _ovDt.mode;
-                            if(_mode == 'override'){
-                                system.loadPluginView(res,view,passedData,plug);
-                                _ovcbk();
-                                return;
-                            } else if(_mode == 'controll'){
-                                var M = system.getPluginController(_ovDt.controller,plug);
-                                var fn = M[_ovDt.action];
-                                fn(res.sleekReq,res,passedData);
-                                _ovcbk();
-                                return;
-                            } else if(_mode == 'append' || _mode == 'prepend' || _mode == 'replace'){
+                            if(_mode == 'append' || _mode == 'prepend' || _mode == 'replace'){
                                 passedData.locals = res.locals;
                                 if(!passedData.PLUGINS){
                                     passedData.PLUGINS =  [];

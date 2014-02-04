@@ -5,5 +5,5 @@
 
 
 exports.routes = [
-    {route: '/plug', controller: 'mod', action:'main'},
+    //{route: '/plug', controller: 'mod', action:'main'},
 ];
